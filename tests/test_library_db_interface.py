@@ -2,10 +2,11 @@ import unittest
 from unittest.mock import Mock, call
 from library import library_db_interface
 
-class TestLibbraryDBInterface(unittest.TestCase):
+class TestLibraryDBInterface(unittest.TestCase):
 
     def setUp(self):
         self.db_interface = library_db_interface.Library_DB()
+        #library_db_interface.Patron = Mock()
 
     def test_insert_patron_not_in_db(self):
         patron_mock = Mock()
@@ -54,6 +55,17 @@ class TestLibbraryDBInterface(unittest.TestCase):
     def test_update_incorrect_patron(self):
         db_update_mock = Mock()
         self.assertEqual(self.db_interface.update_patron(not db_update_mock), None)
+    
+    def test_retrieve_patron(self):
+        patron_mock = Mock(return_value='memberID')
+        data = {'fname': 'name', 'lname': 'name', 'age': 'age', 'memberID': 'memberID', 'borrowed_books': []}
+        self.db_interface.db.search = Mock(return_value=[data])
+        self.assertEqual(self.db_interface.retrieve_patron(patron_mock), library_db_interface.Patron('name', 'name', 'age', 'memberID'))
+
+    def test_retrieve_patron_none(self):
+        patron_mock = Mock(return_value='notMemberID')
+        self.db_interface.db.search = Mock(return_value=None)
+        self.assertEqual(self.db_interface.retrieve_patron(patron_mock), None)
 
     def test_convert_patron_to_db_format(self):
         patron_mock = Mock()
