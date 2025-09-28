@@ -50,6 +50,10 @@ class TestLibbraryDBInterface(unittest.TestCase):
         self.db_interface.db.update = db_update_mock
         self.db_interface.update_patron(Mock())
         db_update_mock.assert_called()
+    
+    def test_update_incorrect_patron(self):
+        db_update_mock = Mock()
+        self.assertEqual(self.db_interface.update_patron(not db_update_mock), None)
 
     def test_convert_patron_to_db_format(self):
         patron_mock = Mock()
