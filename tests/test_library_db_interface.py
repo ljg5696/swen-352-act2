@@ -16,7 +16,7 @@ class TestLibbraryDBInterface(unittest.TestCase):
         self.db_interface.db.insert = Mock(side_effect=lambda x: 10 if x==data else 0)
         self.assertEqual(self.db_interface.insert_patron(patron_mock), 10)
     
-    def test_insertion_patron_already_in_db(self):
+    def test_insert_patron_already_in_db(self):
         patron_mock = Mock()
         self.db_interface.retrieve_patron = Mock(return_value=('name', 'name', 'age', 'memberID'))
         data = {'fname': 'name', 'lname': 'name', 'age': 'age', 'memberID': 'memberID',
@@ -24,6 +24,11 @@ class TestLibbraryDBInterface(unittest.TestCase):
         self.db_interface.convert_patron_to_db_format = Mock(return_value=data)
         self.db_interface.db.insert = Mock()
         self.assertEqual(self.db_interface.insert_patron(patron_mock), None)
+    
+    def test_insert_patron_not_patron(self):
+        patron_mock = Mock()
+        self.db_interface.db.insert = Mock()
+        self.assertEqual(self.db_interface.insert_patron(not patron_mock), None)
 
     def test_update_patron(self):
         data = {'fname': 'name', 'lname': 'name', 'age': 'age', 'memberID': 'memberID',
