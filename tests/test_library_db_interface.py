@@ -67,6 +67,12 @@ class TestLibraryDBInterface(unittest.TestCase):
         self.db_interface.db.search = Mock(return_value=None)
         self.assertEqual(self.db_interface.retrieve_patron(patron_mock), None)
 
+    def test_close_db(self):
+        db_close_mock = Mock()
+        self.db_interface.db.close = db_close_mock
+        self.db_interface.close_db()
+        db_close_mock.assert_called()
+
     def test_convert_patron_to_db_format(self):
         patron_mock = Mock()
 
