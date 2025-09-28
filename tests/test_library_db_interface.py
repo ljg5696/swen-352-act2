@@ -29,6 +29,18 @@ class TestLibbraryDBInterface(unittest.TestCase):
         patron_mock = Mock()
         self.db_interface.db.insert = Mock()
         self.assertEqual(self.db_interface.insert_patron(not patron_mock), None)
+    
+    def test_get_patron_count(self):
+        data = {'fname': 'name', 'lname': 'name', 'age': 'age', 'memberID': 'memberID',
+                'borrowed_books': []}
+        self.db_interface.db.all = Mock(return_value=[data])
+        self.assertEqual(self.db_interface.get_patron_count(), 1)
+
+    def test_get_all_patrons(self):
+        data = {'fname': 'name', 'lname': 'name', 'age': 'age', 'memberID': 'memberID',
+                'borrowed_books': []}
+        self.db_interface.db.all = Mock(return_value=[data])
+        self.assertEqual(self.db_interface.get_all_patrons(), [data])
 
     def test_update_patron(self):
         data = {'fname': 'name', 'lname': 'name', 'age': 'age', 'memberID': 'memberID',
